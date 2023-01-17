@@ -12,7 +12,7 @@ def generate_hidden_number():
     while upper_range <= 20:
         upper_range = input("\nThat seems a bit too easy, it should probably be over 20! Try again: ")
         upper_range = check_type(upper_range)
-    print("±nGood! I'll be thinking of a number between 1 and", upper_range)
+    print("\nGood! I'll be thinking of a number between 1 and", upper_range)
     hidden_number = random.randint(1, upper_range)
     return hidden_number
 
