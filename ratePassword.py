@@ -7,14 +7,14 @@ def enter_password_for_evaluation():
 
 def scoring_password(password):
     content_checks = ['[0-9]', '[A-Z]', '[a-z]', '[$&+,:;=?@#|\'<>.^*()%!-]']
-    score = 0
     passed = 0
     # score on content
     for check in content_checks:
         match = re.search(check, password)
         if match:
             passed += 1
-            score += 1
+    score = passed
+    
     # score on length (also takes content into account)
     if passed == 4:
         score = score + len(password) / 4
