@@ -19,19 +19,14 @@ def scoring_password(password):
         match = re.search(check, password)
         if match:
             passed += 1
-    score = passed
-    
+
     # score on length (also takes content into account)
-    if passed == 4:
-        score = score + len(password) / 4
-    elif passed == 3:
-        score = score + len(password) / 5
-    else:
-        score = score + len(password) / 8
+    score = passed
+    score = score + len(password) / 5 if passed >= 3 else score + len(password) / 10
     
     # score limit
     if score > 10:
-        score = 10
+        score = 10 if passed > 3 else 9
     return score
 
 def print_verdict(score):
