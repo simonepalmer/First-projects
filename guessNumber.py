@@ -4,7 +4,7 @@ import ast
 
 def welcome_to_the_game():
     name = input("What's your name?: ")
-    print("\nHello, " + name + "!")
+    print(f"\nHello, {name}!")
     return name 
 
 def decide_upper_range():
@@ -16,7 +16,7 @@ def decide_upper_range():
         else:
             print("\nThat seems a bit too high, we dont want to be here all day! Maybe 1000 at most?")
             upper_range = check_type(input("Try again: "))
-    print("\nGood! I'll be thinking of a number between 1 and", upper_range)
+    print(f"\nGood! I'll be thinking of a number between 1 and {upper_range}")
     return upper_range 
 
 def decide_my_max_guesses(upper_range):
@@ -28,10 +28,10 @@ def decide_my_max_guesses(upper_range):
     if upper_range < 51: appropriate_min = 2
     while my_max_guesses > appropriate_max or my_max_guesses < appropriate_min:
         if my_max_guesses > appropriate_max:
-            print("\nThat seems a bit too easy based on the range, it should probably be", appropriate_max, "at most!")
+            print(f"\nThat seems a bit too easy based on the range, it should probably be {appropriate_max} at most!")
             my_max_guesses = check_type(input("Try again: "))
         else:
-            print("\nThat seems a bit too hard based on the range, it should probably be", appropriate_min, "at least!")
+            print(f"\nThat seems a bit too hard based on the range, it should probably be {appropriate_min} at least!")
             my_max_guesses = check_type(input("Try again: "))
     print("\nSure, that seems reasonable")
     return my_max_guesses
@@ -39,28 +39,28 @@ def decide_my_max_guesses(upper_range):
 def print_hint_string(my_guess, hidden_number):        
         guess_dif = hidden_number - my_guess
         if guess_dif < -75 or guess_dif > 75: # How far off?
-            hint = " WAY "
+            hint = "WAY "
         elif guess_dif < -25 or guess_dif > 25:
-            hint = " much "
+            hint = "much "
         elif guess_dif < -7 or guess_dif > 7:
-            hint = " "
+            hint = ""
         elif guess_dif < -3 or guess_dif > 3:
-            hint = " a little bit "
+            hint = "a little bit "
         elif guess_dif < -1 or guess_dif > 1:
-            hint = " just a little bit "
+            hint = "just a little bit "
         elif guess_dif == -1 or guess_dif == 1:
-            hint = " so close! just a little bit "
+            hint = "so close! just a little bit "
         if my_guess > hidden_number: # Too high or too low?
             direction = "lower."
         else:
             direction = "higher."
-        print("\nThat is not correct. My number is", hint, direction, sep="") # sep="" because of hint=" "
+        print(f"\nThat is not correct. My number is {hint}{direction}")
 
 def game_over_or_win(my_max_guesses,my_used_guesses, hidden_number):
     if my_used_guesses >= my_max_guesses:
-        print("\nGAME OVER!\nYou are out of guesses, the correct number was " + str(hidden_number) + ".\n")
+        print(f"\nGAME OVER!\nYou are out of guesses, the correct number was {hidden_number}.\n")
     else:
-        print("\nTHAT IS CORRECT!\nI was indeed thinking of " + str(hidden_number) + "!\n")
+        print(f"\nTHAT IS CORRECT!\nI was indeed thinking of {hidden_number}!\n")
 
 def check_type(input_type):
     while type(input_type) != int:
@@ -90,13 +90,14 @@ def main():
     while str(my_guess) != str(hidden_number):
         my_guess = check_type(my_guess)
         hint_string = print_hint_string(my_guess, hidden_number)
-        my_used_guesses+=1
+        my_used_guesses += 1
+        guesses_left = my_max_guesses - my_used_guesses
         if my_used_guesses == my_max_guesses:
             break
         if my_used_guesses == my_max_guesses-1:
-            print("only", my_max_guesses - my_used_guesses, "guess left...")
+            print(f"only {guesses_left} guess left...")
         else:
-            print(my_max_guesses - my_used_guesses, "guesses left")
+            print(f"{guesses_left} guesses left")
         my_guess = input("\nGuess again: ")
     # Game over
     game_over_or_win(my_max_guesses, my_used_guesses, hidden_number)
