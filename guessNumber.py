@@ -5,7 +5,7 @@ import ast
 def welcome_to_the_game():
     name = input("What's your name?: ")
     print("\nHello, " + name + "!")
-    return name # In case I need it for further implementations
+    return name 
 
 def decide_upper_range():
     upper_range = check_type(input("Enter upper range: "))
@@ -21,24 +21,28 @@ def decide_upper_range():
 
 def decide_my_max_guesses(upper_range):
     my_max_guesses = check_type(input("Enter max number of guesses: "))
-    while my_max_guesses > int(upper_range/30+4) or my_max_guesses < int(upper_range/60+2): # +1 to scale a bit on lower ranges
-        if my_max_guesses > int(upper_range/30+4):
-            print("\nThat seems a bit too easy based on the range, it should probably be", int(upper_range/30+4), "at most!")
+    # Adjusting appropriate guesses based on range
+    appropriate_max = 7 if upper_range > 99 else 5
+    if upper_range > 499: appropriate_max = 10
+    appropriate_min = 3 if upper_range < 251 else 4
+    if upper_range < 51: appropriate_min = 2
+    while my_max_guesses > appropriate_max or my_max_guesses < appropriate_min:
+        if my_max_guesses > appropriate_max:
+            print("\nThat seems a bit too easy based on the range, it should probably be", appropriate_max, "at most!")
             my_max_guesses = check_type(input("Try again: "))
         else:
-            print("\nThat seems a bit too hard based on the range, it should probably be", int(upper_range/60+2), "at least!")
+            print("\nThat seems a bit too hard based on the range, it should probably be", appropriate_min, "at least!")
             my_max_guesses = check_type(input("Try again: "))
     print("\nSure, that seems reasonable")
-    return my_max_guesses # There are still some really wonky number guesses on higher ranges :)
-    # I might introduce a appropriate_guesses variable that I can mold into some more reasonable ranges
+    return my_max_guesses
 
 def print_hint_string(my_guess, hidden_number):        
         guess_dif = hidden_number - my_guess
         if guess_dif < -75 or guess_dif > 75: # How far off?
             hint = " WAY "
-        elif guess_dif < -20 or guess_dif > 20:
+        elif guess_dif < -25 or guess_dif > 25:
             hint = " much "
-        elif guess_dif < -10 or guess_dif > 10:
+        elif guess_dif < -7 or guess_dif > 7:
             hint = " "
         elif guess_dif < -3 or guess_dif > 3:
             hint = " a little bit "
