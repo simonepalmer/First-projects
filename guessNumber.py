@@ -8,7 +8,9 @@ def welcome_to_the_game():
     return name 
 
 def decide_upper_range():
+    print("\nI'm going to think of a number and your are going to guess it. What range do you think is reasonable? 1 to what?")
     upper_range = check_type(input("Enter upper range: "))
+
     while upper_range < 20 or upper_range > 1000:
         if upper_range < 20:
             print("\nThat seems a bit too easy, it should probably at least 20!")
@@ -16,16 +18,28 @@ def decide_upper_range():
         else:
             print("\nThat seems a bit too high, we dont want to be here all day! Maybe 1000 at most?")
             upper_range = check_type(input("Try again: "))
+
     print(f"\nGood! I'll be thinking of a number between 1 and {upper_range}")
     return upper_range 
 
 def decide_my_max_guesses(upper_range):
-    my_max_guesses = check_type(input("Enter max number of guesses: "))
-    # Adjusting appropriate guesses based on range
-    appropriate_max = 7 if upper_range > 99 else 5
-    if upper_range > 499: appropriate_max = 10
-    appropriate_min = 3 if upper_range < 251 else 4
-    if upper_range < 51: appropriate_min = 2
+    print("\nHow many guesses do you need?")
+    my_max_guesses = check_type(input("Enter number of guesses: "))
+
+    appropriate_range = [
+        (499, 10, 4),
+        (249, 8, 4),
+        (99, 7, 3),
+        (49, 6, 2),
+        (0, 4, 2)
+    ]
+
+    for range, range_max, range_min in appropriate_range:
+        if upper_range > range:
+            appropriate_max = range_max
+            appropriate_min = range_min
+            break
+
     while my_max_guesses > appropriate_max or my_max_guesses < appropriate_min:
         if my_max_guesses > appropriate_max:
             print(f"\nThat seems a bit too easy based on the range, it should probably be {appropriate_max} at most!")
@@ -33,28 +47,33 @@ def decide_my_max_guesses(upper_range):
         else:
             print(f"\nThat seems a bit too hard based on the range, it should probably be {appropriate_min} at least!")
             my_max_guesses = check_type(input("Try again: "))
+
     print("\nSure, that seems reasonable")
     return my_max_guesses
 
 def print_hint_string(my_guess, hidden_number):        
-        guess_dif = hidden_number - my_guess
-        if guess_dif < -75 or guess_dif > 75: # How far off?
-            hint = "WAY "
-        elif guess_dif < -25 or guess_dif > 25:
-            hint = "much "
-        elif guess_dif < -7 or guess_dif > 7:
-            hint = ""
-        elif guess_dif < -3 or guess_dif > 3:
-            hint = "a little bit "
-        elif guess_dif < -1 or guess_dif > 1:
-            hint = "just a little bit "
-        elif guess_dif == -1 or guess_dif == 1:
-            hint = "so close! just a little bit "
-        if my_guess > hidden_number: # Too high or too low?
-            direction = "lower."
-        else:
-            direction = "higher."
-        print(f"\nThat is not correct. My number is {hint}{direction}")
+    guess_dif = abs(hidden_number - my_guess)
+
+    hints = [ # How far off?
+        (75, "WAY "), 
+        (25, "much "), 
+        (7, ""), 
+        (3, "a little bit "), 
+        (1, "just a little bit "), 
+        (0, "so close! just a little bit ")
+    ]
+
+    for range, hint_text in hints:
+        if guess_dif > range:
+            hint = hint_text
+            break
+    
+    if my_guess > hidden_number: # Too high or too low?
+        direction = "lower."
+    else:
+        direction = "higher."
+
+    print(f"\nThat is not correct. My number is {hint}{direction}")
 
 def game_over_or_win(my_max_guesses,my_used_guesses, hidden_number):
     if my_used_guesses >= my_max_guesses:
@@ -63,27 +82,27 @@ def game_over_or_win(my_max_guesses,my_used_guesses, hidden_number):
         print(f"\nTHAT IS CORRECT!\nI was indeed thinking of {hidden_number}!\n")
 
 def check_type(input_type):
-    while type(input_type) != int:
-        try: # set type based on input (default string, preferred int)
+    while type(input_type) is not int:
+        try:
             input_type = ast.literal_eval(input_type)
         except (ValueError, SyntaxError):
             pass
-        if type(input_type) == float: # Giving hints based on wrong type input
+        if type(input_type) is float:
             input_type = input("\nPlease enter a number(int), not a number with decimals(float) Try again: ")
-        elif type(input_type) == str:
+        elif type(input_type) is str:
             input_type = input("\nPlease enter a number(int), not a word(string). Try again: ")
+        elif type(input_type) is bool:
+            input_type = input("\nPlease enter a number(int), not a True/False(boolean). Try again: ")
         else:
             break
     return input_type
 
 def main():
     name = welcome_to_the_game()
-    # Decide difficulty
-    print("\nI'm going to think of a number and your are going to guess it. What range do you think is reasonable? 1 to what?")
     upper_range = decide_upper_range()
-    hidden_number = random.randint(1, upper_range)
-    print("\nHow many guesses do you need?")
     my_max_guesses = decide_my_max_guesses(upper_range)
+    hidden_number = random.randint(1, upper_range)
+
     # Game starts
     my_used_guesses = 0
     my_guess = input("\nLet's start! What number am I thinking of?\nGuess a number: ")
@@ -94,11 +113,12 @@ def main():
         guesses_left = my_max_guesses - my_used_guesses
         if my_used_guesses == my_max_guesses:
             break
-        if my_used_guesses == my_max_guesses-1:
+        if my_used_guesses == my_max_guesses - 1:
             print(f"only {guesses_left} guess left...")
         else:
             print(f"{guesses_left} guesses left")
         my_guess = input("\nGuess again: ")
+
     # Game over
     game_over_or_win(my_max_guesses, my_used_guesses, hidden_number)
 
