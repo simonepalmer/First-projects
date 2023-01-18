@@ -2,11 +2,17 @@ import re
 
 def enter_password_for_evaluation():
     password = input("Enter your password to get it rated!: ")
-    print("the password entered is '" + password + "'? ... Let's figure out if it's any good!")
+    print(f"the password entered is '{password}' ... Let's figure out if it's any good!")
     return password
 
 def scoring_password(password):
-    content_checks = ['[0-9]', '[A-Z]', '[a-z]', '[$&+,:;=?@#|\'<>.^*()%!-]']
+    content_checks = [
+        '[0-9]',
+        '[A-Z]',
+        '[a-z]',
+        '[$&+,:;=?@#|\'<>.^*()%!-]'
+    ]
+
     passed = 0
     # score on content
     for check in content_checks:
@@ -22,14 +28,27 @@ def scoring_password(password):
         score = score + len(password) / 5
     else:
         score = score + len(password) / 8
+    
     # score limit
     if score > 10:
         score = 10
     return score
 
 def print_verdict(score):
-    verdict = ['not even a password!', 'really bad!', 'just bad!', 'actually bad!', 'pretty bad!', 'so so.', 'pretty ok!', 'pretty good', 'actually really good!','a fantastic password!', 'PERFECT! I love it!']
-    print("it's " + verdict[int(score)] + " I'd rate it " + str(int(score)) + "/10!")
+    verdict = [
+        'not even a password!',
+        'really bad!',
+        'just bad!',
+        'actually bad!',
+        'pretty bad!',
+        'so so.',
+        'pretty ok!',
+        'pretty good',
+        'actually really good!',
+        'a fantastic password!',
+        'PERFECT! I love it!'
+    ]
+    print(f"It's {verdict[int(score)]} I'd rate it {int(score)}/10!")
 
 def main():
     password = enter_password_for_evaluation()
