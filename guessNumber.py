@@ -8,7 +8,8 @@ def welcome_to_the_game():
     return name 
 
 def decide_upper_range():
-    print("\nI'm going to think of a number and your are going to guess it. What range do you think is reasonable? 1 to what?")
+    print("\nI'm going to think of a number and your are going to guess it.") 
+    print("What range do you think is reasonable? 1 to what?")
     upper_range = check_type(input("Enter upper range: "))
 
     while upper_range < 20 or upper_range > 1000:
@@ -23,9 +24,6 @@ def decide_upper_range():
     return upper_range 
 
 def decide_my_max_guesses(upper_range):
-    print("\nHow many guesses do you need?")
-    my_max_guesses = check_type(input("Enter number of guesses: "))
-
     appropriate_range = [
         (499, 10, 4),
         (249, 8, 4),
@@ -39,6 +37,9 @@ def decide_my_max_guesses(upper_range):
             appropriate_max = range_max
             appropriate_min = range_min
             break
+
+    print("\nHow many guesses do you need?")
+    my_max_guesses = check_type(input("Enter number of guesses: "))
 
     while my_max_guesses > appropriate_max or my_max_guesses < appropriate_min:
         if my_max_guesses > appropriate_max:
